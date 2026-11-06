@@ -1,3 +1,5 @@
+// Tarjetas iniciales
+
 const initialCards = [
   {
     name: "Valle de Yosemite",
@@ -54,7 +56,12 @@ const formElement = editPopup.querySelector(".popup__form");
 
 const cardsList = document.querySelector(".cards__list");
 
+const cardTemplate = document
+  .querySelector("#card-template")
+  .content.querySelector(".card");
+
 const addButton = document.querySelector(".profile__add-button");
+
 const newCardPopup = document.querySelector("#new-card-popup");
 
 const newCardCloseButton = newCardPopup.querySelector(".popup__close");
@@ -74,6 +81,7 @@ const imagePopup = document.querySelector("#image-popup");
 const imagePopupCloseButton = imagePopup.querySelector(".popup__close");
 
 const popupImage = imagePopup.querySelector(".popup__image");
+
 const popupCaption = imagePopup.querySelector(".popup__caption");
 
 // Rellenar el formulario del perfil
@@ -113,71 +121,79 @@ formElement.addEventListener("submit", handleProfileFormSubmit);
 
 // Abrir modal de imágenes
 
-function handleImageClick(card) {
-  popupImage.src = card.link;
-  popupImage.alt = card.name;
-  popupCaption.textContent = card.name;
+function handleImageClick(name, link) {
+  popupImage.src = link;
+  popupImage.alt = name;
+  popupCaption.textContent = name;
 
   openModal(imagePopup);
 }
 
-// Crear tarjetas dinámicamente
+// Controlador del botón Me gusta
 
-function createCard(card) {
-  const cardElement = document.createElement("li");
-  cardElement.classList.add("card");
+function handleLikeButtonClick(evt) {
+  evt.currentTarget.classList.toggle("card__like-button_is-active");
+}
 
-  const cardImage = document.createElement("img");
-  cardImage.classList.add("card__image");
-  cardImage.src = card.link;
-  cardImage.alt = card.name;
+// Controlador del botón eliminar
+
+function handleDeleteButtonClick(evt) {
+  const cardElement = evt.currentTarget.closest(".card");
+
+  cardElement.remove();
+}
+
+// Crear un elemento de tarjeta desde el template
+
+function getCardElement(
+  name = "Sin título",
+  link = "./images/placeholder.jpg",
+) {
+  const cardElement = cardTemplate.cloneNode(true);
+
+  const cardTitle = cardElement.querySelector(".card__title");
+
+  const cardImage = cardElement.querySelector(".card__image");
+
+  cardTitle.textContent = name;
+
+  cardImage.src = link;
+  cardImage.alt = name;
+
+  // Botón Me gusta
+
+  const likeButton = cardElement.querySelector(".card__like-button");
+
+  likeButton.addEventListener("click", handleLikeButtonClick);
+
+  // Botón eliminar
+
+  const deleteButton = cardElement.querySelector(".card__delete-button");
+
+  deleteButton.addEventListener("click", handleDeleteButtonClick);
 
   // Abrir imagen ampliada
 
   cardImage.addEventListener("click", function () {
-    handleImageClick(card);
+    handleImageClick(name, link);
   });
-
-  const deleteButton = document.createElement("button");
-  deleteButton.classList.add("card__delete-button");
-  deleteButton.type = "button";
-  deleteButton.setAttribute("aria-label", "Eliminar tarjeta");
-
-  const cardDescription = document.createElement("div");
-  cardDescription.classList.add("card__description");
-
-  const cardTitle = document.createElement("h2");
-  cardTitle.classList.add("card__title");
-  cardTitle.textContent = card.name;
-
-  const likeButton = document.createElement("button");
-  likeButton.classList.add("card__like-button");
-  likeButton.type = "button";
-  likeButton.setAttribute("aria-label", "Me gusta");
-
-  // Activar y desactivar Me gusta
-
-  likeButton.addEventListener("click", function () {
-    likeButton.classList.toggle("card__like-button_is-active");
-  });
-
-  // Eliminar tarjeta
-
-  deleteButton.addEventListener("click", function () {
-    cardElement.remove();
-  });
-
-  cardDescription.append(cardTitle, likeButton);
-
-  cardElement.append(cardImage, deleteButton, cardDescription);
 
   return cardElement;
+}
+
+// Insertar una tarjeta en el contenedor
+
+function renderCard(name, link, container) {
+  const cardElement = getCardElement(name, link);
+
+  container.prepend(cardElement);
 }
 
 // Abrir modal para agregar tarjetas
 
 function handleOpenNewCardModal() {
   newCardForm.reset();
+
   openModal(newCardPopup);
 }
 
@@ -186,16 +202,11 @@ function handleOpenNewCardModal() {
 function handleNewCardFormSubmit(evt) {
   evt.preventDefault();
 
-  const newCard = {
-    name: cardNameInput.value,
-    link: cardLinkInput.value,
-  };
-
-  const cardElement = createCard(newCard);
-
-  cardsList.prepend(cardElement);
+  renderCard(cardNameInput.value, cardLinkInput.value, cardsList);
 
   closeModal(newCardPopup);
+
+  newCardForm.reset();
 }
 
 // Eventos del modal de nuevas tarjetas
@@ -216,9 +227,9 @@ imagePopupCloseButton.addEventListener("click", function () {
 
 // Mostrar las seis tarjetas iniciales
 
-initialCards.forEach(function (card) {
-  const cardElement = createCard(card);
-  cardsList.append(cardElement);
-
-  console.log(card.name);
-});
+initialCards
+  .slice()
+  .reverse()
+  .forEach(function (card) {
+    renderCard(card.name, card.link, cardsList);
+  });
