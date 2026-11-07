@@ -1,5 +1,6 @@
-// Tarjetas iniciales
+import { setEventListeners, resetValidation } from "./validate.js";
 
+// Tarjetas iniciales
 const initialCards = [
   {
     name: "Valle de Yosemite",
@@ -29,12 +30,24 @@ const initialCards = [
 
 // Funciones generales para abrir y cerrar modales
 
+function handleEscKeydown(evt) {
+  if (evt.key === "Escape") {
+    const openedPopup = document.querySelector(".popup_is-opened");
+
+    if (openedPopup) {
+      closeModal(openedPopup);
+    }
+  }
+}
+
 function openModal(modal) {
   modal.classList.add("popup_is-opened");
+  document.addEventListener("keydown", handleEscKeydown);
 }
 
 function closeModal(modal) {
   modal.classList.remove("popup_is-opened");
+  document.removeEventListener("keydown", handleEscKeydown);
 }
 
 // Elementos del perfil
@@ -42,14 +55,11 @@ function closeModal(modal) {
 const editButton = document.querySelector(".profile__edit-button");
 const editPopup = document.querySelector("#edit-popup");
 const closeButton = editPopup.querySelector(".popup__close");
-
 const profileTitle = document.querySelector(".profile__title");
 const profileDescription = document.querySelector(".profile__description");
 
 const nameInput = editPopup.querySelector(".popup__input_type_name");
-
 const jobInput = editPopup.querySelector(".popup__input_type_description");
-
 const formElement = editPopup.querySelector(".popup__form");
 
 // Elementos de las tarjetas
@@ -61,11 +71,9 @@ const cardTemplate = document
   .content.querySelector(".card");
 
 const addButton = document.querySelector(".profile__add-button");
-
 const newCardPopup = document.querySelector("#new-card-popup");
 
 const newCardCloseButton = newCardPopup.querySelector(".popup__close");
-
 const newCardForm = newCardPopup.querySelector("#new-card-form");
 
 const cardNameInput = newCardPopup.querySelector(
@@ -81,8 +89,11 @@ const imagePopup = document.querySelector("#image-popup");
 const imagePopupCloseButton = imagePopup.querySelector(".popup__close");
 
 const popupImage = imagePopup.querySelector(".popup__image");
-
 const popupCaption = imagePopup.querySelector(".popup__caption");
+
+// Activar validación de los formularios
+
+setEventListeners([formElement, newCardForm]);
 
 // Rellenar el formulario del perfil
 
@@ -95,6 +106,7 @@ function fillProfileForm() {
 
 function handleOpenEditModal() {
   fillProfileForm();
+  resetValidation(formElement);
   openModal(editPopup);
 }
 
@@ -152,7 +164,6 @@ function getCardElement(
   const cardElement = cardTemplate.cloneNode(true);
 
   const cardTitle = cardElement.querySelector(".card__title");
-
   const cardImage = cardElement.querySelector(".card__image");
 
   cardTitle.textContent = name;
@@ -193,7 +204,7 @@ function renderCard(name, link, container) {
 
 function handleOpenNewCardModal() {
   newCardForm.reset();
-
+  resetValidation(newCardForm);
   openModal(newCardPopup);
 }
 
@@ -207,6 +218,7 @@ function handleNewCardFormSubmit(evt) {
   closeModal(newCardPopup);
 
   newCardForm.reset();
+  resetValidation(newCardForm);
 }
 
 // Eventos del modal de nuevas tarjetas
@@ -223,6 +235,18 @@ newCardForm.addEventListener("submit", handleNewCardFormSubmit);
 
 imagePopupCloseButton.addEventListener("click", function () {
   closeModal(imagePopup);
+});
+
+// Cerrar modales al hacer clic en el fondo
+
+const popups = document.querySelectorAll(".popup");
+
+popups.forEach((popup) => {
+  popup.addEventListener("mousedown", (evt) => {
+    if (evt.target === popup) {
+      closeModal(popup);
+    }
+  });
 });
 
 // Mostrar las seis tarjetas iniciales
