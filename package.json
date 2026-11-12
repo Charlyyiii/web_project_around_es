@@ -1,0 +1,25 @@
+{
+  "name": "web_project_around_es",
+  "version": "1.0.0",
+  "description": "Este proyecto consiste en una página web interactiva llamada \"Alrededor de los Estados Unidos\" (Around The U.S.).",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Charlyyiii/web_project_around_es.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Charlyyiii/web_project_around_es/issues"
+  },
+  "homepage": "https://github.com/Charlyyiii/web_project_around_es#readme",
+  "devDependencies": {
+    "typescript": "^7.0.2"
+  }
+}
