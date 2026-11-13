@@ -19,36 +19,43 @@ El proyecto utiliza TypeScript y programación orientada a objetos (POO) para or
 
 ## Tecnologías utilizadas
 
-- HTML5.
-- CSS3.
-- TypeScript.
-- JavaScript ES6 Modules.
-- Programación orientada a objetos (POO).
-- Clases, herencia, encapsulación y métodos.
-- Manipulación del DOM.
-- Eventos.
+- HTML5 y CSS3.
+- TypeScript y JavaScript ES6 Modules.
+- Programación orientada a objetos.
+- Manipulación del DOM y eventos.
 - Flexbox y CSS Grid.
 - TypeScript Compiler (tsc).
 
 ## Estructura del proyecto
 
-- `index.html`: estructura principal de la página.
-- `src/`: código fuente escrito en TypeScript.
-- `src/components/`: clases Card, Section, Popup, PopupWithForm, PopupWithImage, UserInfo y FormValidator.
-- `src/utils/`: configuración de validación.
-- `public/`: archivos JavaScript generados por TypeScript.
-- `pages/`: archivos CSS principales.
-- `blocks/`: estilos organizados por componentes.
-- `images/`: imágenes del proyecto.
-- `vendor/`: archivos externos de estilos y fuentes.
+- `src/`: código fuente TypeScript.
+- `src/components/`: clases y componentes del proyecto.
+- `src/utils/`: configuración y utilidades.
+- `public/`: archivos necesarios para ejecutar la página.
+- `public/index.html`: documento HTML principal.
+- `public/blocks/`: estilos CSS por componentes.
+- `public/pages/`: estilos principales.
+- `public/images/`: imágenes.
+- `public/vendor/`: fuentes y estilos externos.
+- `public/components/` y `public/utils/`: JavaScript generado por TypeScript.
 
 ## Compilación
 
-Para compilar los archivos TypeScript y generar los archivos JavaScript dentro de `public/`, ejecuta:
+Para compilar los archivos TypeScript, ejecuta:
 
 ```bash
 npm run build
 ```
+
+## Ejecución local
+
+Para iniciar el servidor local, ejecuta:
+
+```bash
+python3 -m http.server 8000 --directory public
+```
+
+Después abre `http://localhost:8000` en tu navegador.
 
 ## Autor
 
